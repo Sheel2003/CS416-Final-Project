@@ -1,0 +1,25 @@
+/* added by Sheel Patel and Ekow Manuel */
+
+body {
+    background: linear-gradient(to right, #84aec9, #000000);
+}
+
+#event-container {
+    background-color: white;
+}
+
+.navbar {
+    border-bottom: 2px solid white;
+}
+
+.navbar-nav .nav-link {
+    font-size: 22px;
+}
+
+.navbar-brand i {
+    font-size: 30px;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #fff;
+}

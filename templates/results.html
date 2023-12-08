@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    {% load static %}  <!-- Load the static template tag -->
+
+    <div class="p-3" id="my-gradient-container">
+        <div class="row justify-content-center">
+            <div class="col-lg-9">
+                <h1 class="display-3 text-center text-white">TicketHub <i class="bi bi-ticket-perforated"></i></h1>
+
+                <!-- Ticketmaster Events Form -->
+                <form action="{% url 'ticketmaster-results' %}" method="post">
+                    {% csrf_token %}
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" placeholder="Search by genre, artist or event"
+                               name="search">
+                        <input type="text" class="form-control" placeholder="Enter a city e.g., Hartford"
+                               name="location">
+                        <button class="btn btn-outline-danger" type="submit">Search Events</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            {% for message in messages %}
+                <div class="alert alert-danger p-1 mt-3" role="alert">
+                    <h4>{{ message }}</h4>
+                </div>
+            {% endfor %}
+
+            {% if events %}
+                <section class="shadow p-4 mt-4 rounded" id="event-container">
+                    {% for event in events %}
+                        <div class="card mb-3" id="{{ event.event_id }}">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-sm-12 col-md-4">
+                                    <img src="{{ event.event_image }}" alt="event_img"
+                                         class="card-img rounded p-1 img-fluid" id="event-img">
+                                </div>
+                                <div class="col-sm-12 col-md-8">
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-sm-12 col-md-8">
+                                                <h1 class="card-title display-6 text-sm"
+                                                    id="event-title">{{ event.event_name }}</h1>
+                                            </div>
+                                            <div class="col-sm-12 col-md-4 text-end">
+                                                <small class="fs-5 text-success text-sm"
+                                                       id="date">{{ event.event_date }}</small><br>
+                                                <small class="fw-light fs-6 text-success text-sm"
+                                                       id="time">{{ event.event_time }}</small>
+                                            </div>
+                                        </div>
+                                        <p class="card-text text-muted display-7"
+                                           id="venue-name">{{ event.venue_name }}</p>
+                                        <p class="card-text text-muted" id="address">
+                                            <a href="https://www.google.com/maps/search/?api=1&query={{ event.address_line }},{{ event.city_name }},{{ event.state_name }}"
+                                               target="_blank" class="text-decoration-none text-muted">
+                                                {{ event.address_line }}, <br>
+                                                {{ event.city_name }}, {{ event.state_name }}
+                                            </a>
+                                        </p>
+                                        <div class="row">
+                                            <div class="col-sm-8">
+                                                <a class="btn btn-outline-primary bookmark-button"
+                                                   href="{% url 'create-bookmark' %}"
+                                                   id="event-url"
+                                                   role="button" target="_blank">Add to Bookmark</a>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <a class="btn btn-outline-primary" href="{{ event.ticket_url }}"
+                                                   id="event-url"
+                                                   role="button" target="_blank">Get Tickets</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </section>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Move the <script> tag outside the block -->
+    <script src="{% static 'js/ticketmaster.js' %}"></script>
+{% endblock %}
